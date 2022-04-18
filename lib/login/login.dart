@@ -56,8 +56,8 @@ class LoginScreen extends GetWidget<LoginController> {
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8)),
                             hintText: 'Nhập tên tài khoản',
-                            labelStyle:
-                            TextStyle(color: Color(0xf888888), fontSize: 15)),
+                            labelStyle: TextStyle(
+                                color: Color(0xf888888), fontSize: 15)),
                       ),
                       const SizedBox(height: 20),
                       const Text(
@@ -70,6 +70,7 @@ class LoginScreen extends GetWidget<LoginController> {
                       ),
                       const SizedBox(height: 12),
                       TextFormField(
+                        obscureText: true,
                         controller: controller.passwordController,
                         style: const TextStyle(
                           color: Colors.black,
@@ -79,8 +80,8 @@ class LoginScreen extends GetWidget<LoginController> {
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8)),
                             hintText: 'Nhập mật khẩu',
-                            labelStyle:
-                            TextStyle(color: Color(0xf888888), fontSize: 15)),
+                            labelStyle: TextStyle(
+                                color: Color(0xf888888), fontSize: 15)),
                       ),
                       const SizedBox(height: 40),
                       SizedBox(
@@ -91,7 +92,7 @@ class LoginScreen extends GetWidget<LoginController> {
                             primary: ACSColors.primary,
                             shape: const RoundedRectangleBorder(
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(8))),
+                                    BorderRadius.all(Radius.circular(8))),
                           ),
                           onPressed: () => controller.login(),
                           child: const Text(
@@ -107,4 +108,3 @@ class LoginScreen extends GetWidget<LoginController> {
             )));
   }
 }
-

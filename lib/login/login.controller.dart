@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-
 import '../@core/repository/models/Profile.dart';
-import '../@core/repository/repo/service.repo.dart';
 import '../@core/repository/repo/user.repo.dart';
 import '../@core/repository/storage/data.storage.dart';
 import '../@share/router/pages.dart';
@@ -18,7 +16,7 @@ class LoginController extends GetxController {
   @override
   void onReady() {
     var profile = _dataStorage.getToken();
-    if(profile != null){
+    if (profile != null) {
       goToAndRemoveAll(screen: ROUTER_NAVBAR);
     }
     super.onReady();
@@ -27,7 +25,7 @@ class LoginController extends GetxController {
   String? validator(String? value) {
     if (value == null ||
         value.isEmpty ||
-        value.length < 5 ||
+        value.length < 6 ||
         value.length > 40) {
       return 'Tên tài khoản không hợp lệ !';
     }
@@ -39,8 +37,8 @@ class LoginController extends GetxController {
       showLoading();
       await _userRepo
           .login(
-          username: userNameController.text,
-          password: passwordController.text)
+              username: userNameController.text,
+              password: passwordController.text)
           .then((value) => {handlerLogin(value)});
     }
   }
@@ -54,5 +52,4 @@ class LoginController extends GetxController {
     }
     hideLoading();
   }
-
 }

@@ -98,6 +98,20 @@ class ACSTyphoghraphy {
     color: ACSColors.secondaryText,
   );
 
+  static const TextStyle orderDetail = TextStyle(
+    fontFamily: 'CrimsonPro-SemiBold',
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: Colors.black45,
+  );
+
+  static const TextStyle order = TextStyle(
+    fontFamily: 'CrimsonPro-SemiBold',
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: Colors.black54,
+  );
+
   static const TextStyle title = TextStyle(
     fontFamily: 'CrimsonPro-SemiBold',
     fontSize: 18,
