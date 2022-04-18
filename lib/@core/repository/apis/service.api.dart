@@ -21,6 +21,9 @@ class ServiceApi extends BaseConnect {
     return await getResponse('/district/$cityId');
   }
 
+  Future<BaseResponse?> getOrderByStaffId({required int staffId,  required Map<String, dynamic> map}) async {
+    return await getResponse('/order/$staffId/staffId', query: map);
+  }
 
 }
 

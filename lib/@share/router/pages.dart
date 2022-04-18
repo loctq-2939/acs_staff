@@ -6,3 +6,4 @@ const ROUTER_BOOKING = '/bookingScreen';
 const ROUTER_CONFIRM_BOOKING = '/confirmBookingScreen';
 const ROUTER_NAVBAR = '/NavBarScreen';
 const ROUTE_REGISTER_SCHEDULE = '/registerScheduleScreen';
+const ROUTE_ORDER_DETAIL = '/ROUTE_ORDER_DETAIL';

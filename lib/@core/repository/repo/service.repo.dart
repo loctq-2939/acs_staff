@@ -1,6 +1,7 @@
 
 import 'dart:ffi';
 
+import 'package:acs_staff/@core/repository/models/Order.dart';
 import 'package:acs_staff/@core/repository/models/Slot.dart';
 
 import '../apis/service.api.dart';
@@ -22,5 +23,8 @@ class ServiceRepo {
     return res?.success ?? false;
   }
 
-
+  Future<List<Order>?> getOrderByStaffId({required int staffId, required Map<String, dynamic> map}) async {
+    var res = await serviceApi.getOrderByStaffId(staffId: staffId, map: map);
+    return res?.success == true ? List.from(res?.data).map((e)=> Order.fromJson(e)).toList() : null;
+  }
 }

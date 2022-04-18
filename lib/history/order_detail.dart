@@ -1,17 +1,11 @@
+import 'package:acs_staff/history/order_detail.controller.dart';
 import 'package:acs_staff/styles/acs_colors.dart';
 import 'package:acs_staff/styles/acs_typhoghraphy.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class OrderDetailScreen extends StatefulWidget {
-  OrderDetailScreen({Key? key}) : super(key: key);
-
-  @override
-  State<OrderDetailScreen> createState() => _OrderDetailScreenState();
-}
-
-class _OrderDetailScreenState extends State<OrderDetailScreen> {
-  final items = ['Item 1', 'Item 2', 'Item 3', 'Item 4'];
+class OrderDetailScreen extends GetWidget<OrderDetailController> {
+  const OrderDetailScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +14,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       appBar: AppBar(
         backgroundColor: ACSColors.primary,
         title:
-            const Text('Chi tiết đơn hàng', style: ACSTyphoghraphy.titleAppbar),
+        const Text('Chi tiết đơn hàng', style: ACSTyphoghraphy.titleAppbar),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -51,8 +45,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   const Divider(color: ACSColors.background, thickness: 2),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Expanded(
+                    children: [
+                      const Expanded(
                         flex: 2,
                         child: Text(
                           'Tên khách hàng',
@@ -61,9 +55,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                       ),
                       Expanded(
                         flex: 3,
-                        child: Text(
-                          'Chị Uyên',
-                          style: ACSTyphoghraphy.orderDetail,
+                        child: Obx(() => Text(
+                            controller.order.value.fullName ?? '',
+                            style: ACSTyphoghraphy.orderDetail,
+                          ),
                         ),
                       ),
                     ],
@@ -71,8 +66,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   const SizedBox(height: 10),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Expanded(
+                    children:  [
+                      const Expanded(
                         flex: 2,
                         child: Text(
                           'Số điện thoại',
@@ -81,9 +76,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                       ),
                       Expanded(
                         flex: 3,
-                        child: Text(
-                          '0378285566',
-                          style: ACSTyphoghraphy.orderDetail,
+                        child: Obx(() =>  Text(
+                            controller.order.value.phone ?? '',
+                            style: ACSTyphoghraphy.orderDetail,
+                          ),
                         ),
                       ),
                     ],
@@ -91,8 +87,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   const SizedBox(height: 10),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Expanded(
+                    children:  [
+                      const Expanded(
                         flex: 2,
                         child: Text(
                           'Địa chỉ',
@@ -101,9 +97,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                       ),
                       Expanded(
                         flex: 3,
-                        child: Text(
-                          'Số 123 đường S11 - Phường An Lạc - Quận Bình Tân',
-                          style: ACSTyphoghraphy.orderDetail,
+                        child: Obx(() => Text(
+                            controller.order.value.address ?? '',
+                            style: ACSTyphoghraphy.orderDetail,
+                          ),
                         ),
                       ),
                     ],
@@ -140,57 +137,61 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                         flex: 2,
                         child: Text('Trạng thái', style: ACSTyphoghraphy.order),
                       ),
-                      Expanded(
-                        flex: 2,
-                        child: changeStatus(3),
+                      Obx(() =>  Expanded(
+                          flex: 2,
+                          child: changeStatus(controller.order.value.orderStatus ?? 0),
+                        ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 10),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Expanded(
+                    children: [
+                      const Expanded(
                         flex: 2,
                         child:
-                            Text('Ngày sửa chữa', style: ACSTyphoghraphy.order),
+                        Text('Ngày sửa chữa', style: ACSTyphoghraphy.order),
                       ),
-                      Expanded(
-                        flex: 2,
-                        child: Text('07/01/2022',
-                            style: ACSTyphoghraphy.orderDetail),
+                      Obx(() => Expanded(
+                          flex: 2,
+                          child: Text(controller.order.value.date ?? '',
+                              style: ACSTyphoghraphy.orderDetail),
+                        ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 10),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Expanded(
+                    children:  [
+                      const Expanded(
                         flex: 2,
                         child:
-                            Text('Tổng số máy', style: ACSTyphoghraphy.order),
+                        Text('Tổng số máy', style: ACSTyphoghraphy.order),
                       ),
-                      Expanded(
-                        flex: 2,
-                        child: Text('4', style: ACSTyphoghraphy.orderDetail),
+                      Obx(() => Expanded(
+                          flex: 2,
+                          child: Text(controller.order.value.quantity.toString() ?? '', style: ACSTyphoghraphy.orderDetail),
+                        ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 10),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Expanded(
+                    children: [
+                      const Expanded(
                         flex: 2,
                         child: Text('Tình trạng', style: ACSTyphoghraphy.order),
                       ),
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          'Hư bộ phận bơm ga, bụi bẩn',
-                          style: ACSTyphoghraphy.order,
-                          overflow: TextOverflow.clip,
+                      Obx(() => Expanded(
+                          flex: 2,
+                          child: Text(
+                            controller.order.value.description ?? '',
+                            style: ACSTyphoghraphy.order,
+                            overflow: TextOverflow.clip,
+                          ),
                         ),
                       ),
                     ],
@@ -231,14 +232,14 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                       ),
                                       child: DropdownButtonHideUnderline(
                                         child: DropdownButton<dynamic>(
-                                          items: items
+                                          items: controller.items
                                               .map((e) => buildMenuItem(e))
                                               .toList(),
                                           icon: Image.asset(
                                               'assets/icons/arrow-down.png'),
                                           elevation: 0,
                                           isExpanded: true,
-                                          value: items[0],
+                                          value: controller.items[0],
                                           onChanged: (value) {},
                                         ),
                                       ),
@@ -271,7 +272,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(
                                           borderRadius:
-                                              BorderRadius.circular(12),
+                                          BorderRadius.circular(12),
                                         ),
                                       ),
                                       minLines: 2,
@@ -280,7 +281,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                     const SizedBox(height: 14),
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
+                                      MainAxisAlignment.spaceAround,
                                       children: [
                                         TextButton(
                                           onPressed: () => Get.back(),
@@ -296,7 +297,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                             'Xác nhận',
                                             style: ACSTyphoghraphy.buttonTitle
                                                 .copyWith(
-                                                    color: ACSColors.primary),
+                                                color: ACSColors.primary),
                                           ),
                                         ),
                                       ],
@@ -382,9 +383,9 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   }
 
   DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
-        child: Text(item, style: ACSTyphoghraphy.heading1),
-        value: item,
-      );
+    child: Text(item, style: ACSTyphoghraphy.heading1),
+    value: item,
+  );
 
   Widget changeStatus(int index) {
     if (index == 1) {

@@ -1,5 +1,6 @@
 
 import 'package:acs_staff/schedule/register_schedule/register_schedule.controller.dart';
+import 'package:acs_staff/schedule/schedule_today.controller.dart';
 import 'package:acs_staff/schedule/schedule_week/schedule_week.controller.dart';
 import 'package:get/get.dart';
 
@@ -17,6 +18,6 @@ class NavBarBinding extends Bindings {
     Get.put(ServiceRepo(Get.find()));
     Get.lazyPut(() => NavBarController());
     Get.lazyPut(() => ScheduleWeekController());
-    Get.lazyPut(() => RegisterScheduleController());
+    Get.lazyPut(() => ScheduleTodayController());
   }
 }
