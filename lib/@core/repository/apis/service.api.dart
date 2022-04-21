@@ -1,5 +1,7 @@
 
 
+import 'dart:io';
+
 import '../response/base.response.dart';
 import 'base_connect.api.dart';
 
@@ -25,5 +27,8 @@ class ServiceApi extends BaseConnect {
     return await getResponse('/order/$staffId/staffId', query: map);
   }
 
+  Future<BaseResponse?> updateImageOrder({required int id, required File file}) async {
+    return await putFormDataRequest('/orderDetail/update/$id/image', file);
+  }
 }
 

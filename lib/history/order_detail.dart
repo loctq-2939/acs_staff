@@ -330,13 +330,14 @@ class OrderDetailScreen extends GetWidget<OrderDetailController> {
                                   width: 180,
                                   child: Column(
                                     children: [
-                                      Image.asset(
-                                        'assets/images/no-image.jpg',
-                                        width: 120,
-                                        height: 120,
+                                      Obx(() => Image.file(
+                                          controller.filePhoto.value,
+                                          width: 120,
+                                          height: 120,
+                                        ),
                                       ),
                                       ElevatedButton(
-                                        onPressed: () {},
+                                        onPressed: () => controller.getImage(),
                                         child: Text('Thêm ảnh'),
                                       ),
                                     ],
@@ -348,7 +349,7 @@ class OrderDetailScreen extends GetWidget<OrderDetailController> {
                           icon: Icon(Icons.camera),
                         ),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () => controller.updateImage(),
                           child: const Text(
                             'Hoàn thành',
                             style: TextStyle(color: Colors.green),

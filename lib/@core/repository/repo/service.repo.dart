@@ -1,5 +1,6 @@
 
 import 'dart:ffi';
+import 'dart:io';
 
 import 'package:acs_staff/@core/repository/models/Order.dart';
 import 'package:acs_staff/@core/repository/models/Slot.dart';
@@ -26,5 +27,10 @@ class ServiceRepo {
   Future<List<Order>?> getOrderByStaffId({required int staffId, required Map<String, dynamic> map}) async {
     var res = await serviceApi.getOrderByStaffId(staffId: staffId, map: map);
     return res?.success == true ? List.from(res?.data).map((e)=> Order.fromJson(e)).toList() : null;
+  }
+
+  Future<bool> updateImageOrder({required int id, required File file}) async {
+    var res = await serviceApi.updateImageOrder(id: id, file: file);
+    return res?.success ?? false;
   }
 }
