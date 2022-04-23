@@ -1,50 +1,40 @@
-/*class ServiceModel {
-  final String id;
-  final String typeId;
-  final String name;
-  final String description;
-  final String price;
-  final String status;
-
-  ServiceModel({
-    required this.id,
-    required this.typeId,
-    required this.name,
-    required this.description,
-    required this.price,
-    required this.status,
-  });
-}*/
-
 class Service {
-  Service({
-    this.id,
-    this.name,
-    this.content,
-    this.imageUrl,
-    this.status,
-  });
-  late final int? id;
-  late final String? name;
-  late final String? content;
-  late final String? imageUrl;
-  late final int? status;
+  int? id;
+  int? typeId;
+  String? name;
+  String? description;
+  int? price;
+  int? status;
+  String? typeName;
 
-  Service.fromJson(Map<String, dynamic> json){
+  Service(
+      {this.id,
+        this.typeId,
+        this.name,
+        this.description,
+        this.price,
+        this.status,
+        this.typeName});
+
+  Service.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    typeId = json['type_id'];
     name = json['name'];
-    content = json['content'];
-    imageUrl = json['imageUrl'];
+    description = json['description'];
+    price = json['price'];
     status = json['status'];
+    typeName = json['type_name'];
   }
 
   Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['id'] = id;
-    _data['name'] = name;
-    _data['content'] = content;
-    _data['imageUrl'] = imageUrl;
-    _data['status'] = status;
-    return _data;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['type_id'] = this.typeId;
+    data['name'] = this.name;
+    data['description'] = this.description;
+    data['price'] = this.price;
+    data['status'] = this.status;
+    data['type_name'] = this.typeName;
+    return data;
   }
 }

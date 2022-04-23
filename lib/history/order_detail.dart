@@ -1,8 +1,14 @@
+import 'dart:io';
+
+import 'package:acs_staff/@core/repository/models/order_detail.dart';
 import 'package:acs_staff/history/order_detail.controller.dart';
 import 'package:acs_staff/styles/acs_colors.dart';
 import 'package:acs_staff/styles/acs_typhoghraphy.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../@core/repository/models/service.dart';
+import '../@share/utils/util.dart';
 
 class OrderDetailScreen extends GetWidget<OrderDetailController> {
   const OrderDetailScreen({Key? key}) : super(key: key);
@@ -230,17 +236,25 @@ class OrderDetailScreen extends GetWidget<OrderDetailController> {
                                         border: Border.all(
                                             color: ACSColors.primary, width: 1),
                                       ),
-                                      child: DropdownButtonHideUnderline(
-                                        child: DropdownButton<dynamic>(
-                                          items: controller.items
-                                              .map((e) => buildMenuItem(e))
-                                              .toList(),
-                                          icon: Image.asset(
-                                              'assets/icons/arrow-down.png'),
-                                          elevation: 0,
-                                          isExpanded: true,
-                                          value: controller.items[0],
-                                          onChanged: (value) {},
+                                      child: Obx(() => DropdownButtonHideUnderline(
+                                          child: DropdownButton<dynamic>(
+                                            items: controller.items
+                                                .map((e) => buildMenuItem1(e))
+                                                .toList(),
+                                            hint: Text("Chọn dịch vụ"),
+                                            icon: Image.asset(
+                                                'assets/icons/arrow-down.png'),
+                                            elevation: 0,
+                                            isExpanded: true,
+                                            onChanged: (value) {
+                                              if (value != null) {
+                                                controller.serviceSelected.value = value;
+                                              }
+                                            },
+                                            value: controller.serviceSelected.value.id != null
+                                                ? controller.serviceSelected.value
+                                                : null,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -258,25 +272,32 @@ class OrderDetailScreen extends GetWidget<OrderDetailController> {
                                         border: Border.all(
                                             color: ACSColors.primary, width: 1),
                                       ),
-                                      child: const Text(
-                                        '245.000 VNĐ',
-                                        style: ACSTyphoghraphy.detail,
-                                        textAlign: TextAlign.start,
+                                      child: Obx(() => Text(
+                                          controller.serviceSelected.value.price != null
+                                              ? controller.serviceSelected.value.price.toString()
+                                              : "0",
+                                          style: ACSTyphoghraphy.detail,
+                                          textAlign: TextAlign.start,
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(height: 10),
                                     const Text('Miêu tả lý do',
                                         style: ACSTyphoghraphy.title),
                                     const SizedBox(height: 10),
-                                    TextFormField(
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                          BorderRadius.circular(12),
+                                    Form(
+                                      key: controller.orderFormKey,
+                                      child: TextFormField(
+                                        controller: controller.descriptionController,
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(12),
+                                          ),
                                         ),
+                                        minLines: 2,
+                                        maxLines: 3,
                                       ),
-                                      minLines: 2,
-                                      maxLines: 3,
                                     ),
                                     const SizedBox(height: 14),
                                     Row(
@@ -292,7 +313,7 @@ class OrderDetailScreen extends GetWidget<OrderDetailController> {
                                           ),
                                         ),
                                         TextButton(
-                                          onPressed: () {},
+                                          onPressed: () => controller.createOrderDetail(),
                                           child: Text(
                                             'Xác nhận',
                                             style: ACSTyphoghraphy.buttonTitle
@@ -312,52 +333,15 @@ class OrderDetailScreen extends GetWidget<OrderDetailController> {
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 6),
-                    child: Row(
-                      children: [
-                        const Expanded(
-                          flex: 3,
-                          child: Text('Tên service: giá tiền VNĐ'),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (_) => AlertDialog(
-                                content: SizedBox(
-                                  height: 180,
-                                  width: 180,
-                                  child: Column(
-                                    children: [
-                                      Obx(() => Image.file(
-                                          controller.filePhoto.value,
-                                          width: 120,
-                                          height: 120,
-                                        ),
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () => controller.getImage(),
-                                        child: Text('Thêm ảnh'),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                          icon: Icon(Icons.camera),
-                        ),
-                        TextButton(
-                          onPressed: () => controller.updateImage(),
-                          child: const Text(
-                            'Hoàn thành',
-                            style: TextStyle(color: Colors.green),
-                          ),
-                        ),
-                      ],
-                    ),
+                Obx(() => ListView.builder(
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.all(8),
+                      itemCount: controller.orderDetails.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Obx(() => orderDetailItem(context, index));
+                      }
                   ),
+                ),
                 ],
               ),
             ),
@@ -368,7 +352,7 @@ class OrderDetailScreen extends GetWidget<OrderDetailController> {
       bottomNavigationBar: Container(
         margin: const EdgeInsets.symmetric(horizontal: 20),
         child: ElevatedButton(
-          onPressed: () => Get.back(),
+          onPressed: () => controller.doneOrder(),
           child: const Text(
             'Hoàn thành',
             style: ACSTyphoghraphy.buttonTitle,
@@ -385,6 +369,11 @@ class OrderDetailScreen extends GetWidget<OrderDetailController> {
 
   DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
     child: Text(item, style: ACSTyphoghraphy.heading1),
+    value: item,
+  );
+
+  DropdownMenuItem<Service> buildMenuItem1(Service item) => DropdownMenuItem(
+    child: Text(item.name ?? '', style: ACSTyphoghraphy.heading1),
     value: item,
   );
 
@@ -409,5 +398,75 @@ class OrderDetailScreen extends GetWidget<OrderDetailController> {
       'Đã hoàn thành',
       style: ACSTyphoghraphy.appointmentDetail.copyWith(color: Colors.green),
     );
+  }
+
+  Widget orderDetailItem(BuildContext context, int index) {
+    var orderDetail = controller.orderDetails[index];
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: Row(
+        children: [
+           Expanded(
+            flex: 3,
+            child: Text('${orderDetail.serviceName}: ${orderDetail.servicePrice} VNĐ'),
+          ),
+          IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  content: SizedBox(
+                    height: 180,
+                    width: 180,
+                    child: Column(
+                      children: [
+                        imageOrder(orderDetail),
+                        ElevatedButton(
+                          onPressed: () {
+                            controller.getImage(orderDetail).then((value) => {
+                              if(value != null) {
+                                goBack(),
+                                controller.updateImage(value)
+                              }}
+                            );
+                          },
+                          child: const Text('Thêm ảnh'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+            icon: Icon(Icons.camera),
+          ),
+          TextButton(
+            onPressed: () => controller.doneOrderDetail(orderDetail.id),
+            child: const Text(
+              'Hoàn thành',
+              style: TextStyle(color: Colors.green),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget imageOrder(OrderDetail orderDetail) {
+    var url = orderDetail.imageUrl;
+    if(url != null) {
+      return Image.network(
+        url,
+        width: 120,
+        height: 120,
+      );
+    }
+    else {
+      return Image.asset(
+        'assets/images/no-image.jpg',
+        width: 120,
+        height: 120,
+      );
+    }
   }
 }

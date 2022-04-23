@@ -1,4 +1,4 @@
-import 'package:acs_staff/@core/repository/models/Order.dart';
+import 'package:acs_staff/@core/repository/models/order.dart';
 import 'package:acs_staff/@share/utils/util.dart';
 import 'package:acs_staff/history/order_detail.dart';
 import 'package:acs_staff/schedule/schedule_today.controller.dart';

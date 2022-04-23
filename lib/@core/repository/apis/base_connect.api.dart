@@ -61,10 +61,28 @@ class BaseConnect extends GetConnect {
   Future<BaseResponse?> putFormDataRequest(String url,File file, {dynamic body, dynamic query, headers}) async {
     Get.log('[BODY] : ${body.toString()}');
     final form = FormData({
-      "file": MultipartFile(file, filename: "file", contentType: "multipart/form-data"),
+      "file": MultipartFile(file, filename: "file"),
     });
     var response =
     await put(url, form, decoder: (map) => BaseResponse.fromMap(map), query: query, headers: headers);
+    if (response.isOk) {
+      Get.log('[RESPONSE] : ${response.body?.toMap()}');
+      return response.body;
+    } else {
+      hideLoading();
+      return BaseResponse(
+          success: false,
+          message: response.statusText,
+          code: response.status.code);
+    }
+  }
+
+  Future<BaseResponse?> pathRequest(String url, {dynamic body, dynamic query, headers}) async {
+    Get.log('[BODY] : ${body.toString()}');
+    var response =
+    await patch(url, body, decoder: (map) => BaseResponse.fromMap(map),
+        query: query,
+        headers: headers);
     if (response.isOk) {
       Get.log('[RESPONSE] : ${response.body?.toMap()}');
       return response.body;
